@@ -51,6 +51,16 @@ NSDictionary *filterTypes;
 -(void)showAutocomplete:(NSString *)filter bounds:(NSDictionary *)boundsDictionary restriction:(NSDictionary *)restriction country:(NSString *)country {
     
     GMSAutocompleteViewController *autocompleteController = [[GMSAutocompleteViewController alloc] init];
+  
+  if(@available(iOS 12.0, *)) {
+    // TODO: Remove me when google fixes: https://issuetracker.google.com/issues.145619266
+    if(autocompleteController.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+      autocompleteController.tableCellBackgroundColor = UIColor.blackColor;
+      autocompleteController.primaryTextColor = UIColor.whiteColor;
+      autocompleteController.secondaryTextColor = UIColor.grayColor;
+      autocompleteController.primaryTextHighlightColor = UIColor.whiteColor;
+    }
+  }
     
     if (![filter isEqual:[NSNull null]] || ![country isEqual:[NSNull null]]) {
         GMSAutocompleteFilter *autocompleteFilter = [[GMSAutocompleteFilter alloc] init];
