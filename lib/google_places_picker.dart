@@ -46,9 +46,16 @@ class PluginGooglePlacePicker {
       "type": _convertFilterTypeToString(typeFilter),
       "country": countryCode
     };
-    final Map placeMap =
-        await _channel.invokeMethod('showAutocomplete', argMap);
-    return _initPlaceFromMap(placeMap);
+
+    try {
+      final Map placeMap = await _channel.invokeMethod('showAutocomplete', argMap);
+      return _initPlaceFromMap(placeMap);
+    } on PlatformException catch(e) {
+      if(e.code == "USER_CANCELED")
+        return null;
+
+      print(e);
+    }
   }
 
   static Future<void> initialize(
